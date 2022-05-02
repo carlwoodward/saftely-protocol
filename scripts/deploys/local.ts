@@ -1,9 +1,9 @@
 import '@nomiclabs/hardhat-ethers';
 import { ethers } from 'hardhat';
-import { NodeNFT__factory, Playa3ullToken__factory, FakeERC20__factory, FakeERC721__factory  } from '../../typechain';
+import { FakeERC20__factory, Presale__factory  } from '../../typechain';
 import { DeployedContracts } from './contract-addresses';
 
-import { toAtto } from '../../shared/utils';
+import { blockTimestamp, toAtto } from '../../shared/utils';
 
 const EPOCH_SIZE_SECONDS = 60; // Every minute for local testing
 const EPOCH_REWARD = toAtto(6849315 / 24);   // Daily rewards per hour 
@@ -12,11 +12,22 @@ async function main() {
   const [owner] = await ethers.getSigners();
 
   const fakeUSD = await new FakeERC20__factory(owner).deploy("USD", "USD");
+  const fakeSaftelyToken = await new FakeERC20__factory(owner).deploy("Saftley", "SAFTELY");
+
+  const presale = await new Presale__factory(owner).deploy(
+    await blockTimestamp() + 10000,
+    await blockTimestamp(),
+    100000,
+    fakeUSD.address,
+    await owner.getAddress(),
+  );
+
+  await presale.setIssuedToken(fakeSaftelyToken.address);
 
   // Print config required to run dApp
   const deployedContracts: DeployedContracts = {
-    USDC:         fakeUSD.address,
-    PRESALE: '',
+    USDC:    fakeUSD.address,
+    PRESALE: fakeSaftelyToken.address,
     OWNER: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266', // Account #0
   };
 
