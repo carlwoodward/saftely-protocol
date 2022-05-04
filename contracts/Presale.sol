@@ -90,7 +90,7 @@ contract Presale is Ownable {
 
         claimed[account] += share;
         totalClaimed += share;
-        totalAllocated -= share;
+        
         SafeERC20.safeTransfer(issuedToken, account, claimable);
         emit Claimed(msg.sender, claimable);
     }
