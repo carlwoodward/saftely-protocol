@@ -68,7 +68,11 @@ contract Presale is Ownable {
 
     function calculateClaimable(address account) public view returns (uint256 share, uint256 amount)
     {
-        if (block.timestamp > vestingStartTimestamp) {
+        if (block.timestamp < vestingStartTimestamp) {
+            return (0,0);
+        }
+
+        if (totalAllocated == totalClaimed) {
             return (0,0);
         }
 
