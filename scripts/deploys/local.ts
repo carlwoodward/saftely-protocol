@@ -27,8 +27,8 @@ async function main() {
   // Print config required to run dApp
   const deployedContracts: DeployedContracts = {
     USDC:    fakeUSD.address,
-    PRESALE: fakeSaftelyToken.address,
-    OWNER: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266', // Account #0
+    PRESALE: presale.address,
+    OWNER: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', // Account #0
   };
 
   await fakeUSD.connect(owner).mint(deployedContracts.OWNER, "50000000000000000000000");
